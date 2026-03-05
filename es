@@ -1,0 +1,24 @@
+FROM debian:bookworm-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bluetooth \
+    bluez \
+    dbus \
+    python3 \
+    python3-pip \
+    python3-pydbus \
+    python3-gi \
+    gir1.2-glib-2.0 \
+    ca-certificates \
+    tzdata \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY gateway.py /app/gateway.py
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
